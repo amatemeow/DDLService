@@ -11,6 +11,7 @@ import uni.diploma.ddlservice.processing.JSONDeserializer;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class APIController {
@@ -28,14 +29,22 @@ public class APIController {
         return "Hello!";
     }
 
-    @GetMapping("/api/schema/user/{user}")
-    public SQLSchema getUserSchema(@PathVariable String user)
+    @GetMapping("/api/schema/")
+    public List<SQLSchema> getUserSchema(@RequestParam(required = false) String user)
             throws DDLServiceMissingUserException {
+        List<SQLSchema> response = new ArrayList<>();
         try {
-            return schemas.stream().filter(sch -> sch.getUser().equals(user)).findFirst().get();
-        } catch (NoSuchElementException NSE) {
+            response = schemas.stream().filter(sch -> sch.getUser().equals(user))
+                    .collect(Collectors.toList());
+        } catch (RuntimeException re) {
             throw new DDLServiceMissingUserException();
+        } finally {
+            if (response.isEmpty()) {
+                throw new DDLServiceMissingUserException();
+            }
         }
+
+        return response;
     }
 
     @GetMapping("/api/ddl-from-schema/{id}")
