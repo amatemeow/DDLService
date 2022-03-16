@@ -13,5 +13,10 @@ import java.util.ArrayList;
 public class SQLTable {
     @NonNull private String tableName;
     @NonNull private ArrayList<SQLColumn> columns;
-    private ArrayList<SQLConstraint> constraints;
+    private ArrayList<SQLConstraint> constraints = new ArrayList<>();
+
+    public SQLTable(String tableName) {
+        this.tableName = tableName;
+        this.columns = new ArrayList<>();
+    }
 }

@@ -1,26 +1,31 @@
 package uni.diploma.ddlservice.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 @Data
-@RequiredArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class SQLSchema {
-    @NonNull private final Long id;
+    private final UUID id = UUID.randomUUID();
     @NonNull private final String user;
     private String schemaName = "Untitled";
-    private String sqlSchema;
+    private Optional<String> sqlSchema = Optional.empty();
     @NonNull private ArrayList<SQLTable> tables;
 
-    public SQLSchema(Long id, String user, String schemaName, ArrayList<SQLTable> tables) {
-        this.id = id;
+    public SQLSchema(String user) {
+        this.user = user;
+    }
+
+    public SQLSchema(String user, String schemaName, ArrayList<SQLTable> tables) {
         this.user = user;
         this.schemaName = schemaName;
-        this.tables = (ArrayList<SQLTable>) tables.clone();
+        this.tables = new ArrayList<>(tables);
+    }
+
+    @Override
+    public SQLSchema clone() {
+        return new SQLSchema(this.user, this.schemaName, this.sqlSchema, this.tables);
     }
 }
