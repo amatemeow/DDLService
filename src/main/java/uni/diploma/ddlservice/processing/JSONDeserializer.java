@@ -17,6 +17,7 @@ public class JSONDeserializer {
         SQLSchema requestSchema = new SQLSchema((String) source.get("user"));
         requestSchema.setSchemaName((String) source.get("schemaName"));
         requestSchema.setSqlSchema(Optional.ofNullable((String) source.get("sqlSchema")));
+        requestSchema.setByRoot((boolean) source.get("byRoot"));
         ArrayList<LinkedHashMap<String, Object>> requestTables = (ArrayList<LinkedHashMap<String, Object>>) source.get("tables");
 
         ArrayList<SQLTable> tables = new ArrayList<>();
