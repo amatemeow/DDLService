@@ -8,8 +8,6 @@ import uni.diploma.ddlservice.exceptions.DDLServiceMissingUserException;
 import uni.diploma.ddlservice.processing.DDLBuilder;
 import uni.diploma.ddlservice.processing.JSONDeserializer;
 
-import java.awt.image.AreaAveragingScaleFilter;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,7 +19,8 @@ public class APIController {
             new ArrayList<>(List.of(new SQLColumn("ID", SQLColTypes.NUMBER))),
                     new ArrayList<>(List.of(
                             new SQLConstraint(Optional.of("MY_ID_UNQ"), SQLConTypes.UNIQUE, "ID"),
-                            new SQLConstraint(Optional.of("MY_ID_NOTNULL"), SQLConTypes.NOTNULL, "ID")))))));
+                            new SQLConstraint(Optional.of("MY_ID_NOTNULL"), SQLConTypes.NOTNULL, "ID")))))),
+            true);
     private static final ArrayList<SQLSchema> schemas = new ArrayList<>(List.of(sampleSchema));
 
     @GetMapping("/api/hello")
@@ -29,7 +28,7 @@ public class APIController {
         return "Hello!";
     }
 
-    @GetMapping("/api/schema/")
+    @GetMapping("/api/schema")
     public List<SQLSchema> getUserSchema(@RequestParam(required = false) String user)
             throws DDLServiceMissingUserException {
         List<SQLSchema> response = new ArrayList<>();
