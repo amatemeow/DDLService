@@ -2,16 +2,21 @@ package uni.diploma.ddlservice.entities;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class Session {
     private final String sessionID;
     private final LocalDateTime initiateDateTime;
-    private final ArrayList<SQLSchema> sessionSchemas = new ArrayList<>();
+    private SQLSchema sessionSchema = null;
 
     public Session(String sessionID) {
         this.sessionID = sessionID;
         this.initiateDateTime = LocalDateTime.now();
+    }
+
+    private Session(String id, LocalDateTime initDT, SQLSchema schema) {
+        this.sessionID = id;
+        this.initiateDateTime = initDT;
+        this.sessionSchema = schema.clone();
     }
 
     public LocalDateTime getInitiateDateTime() {
@@ -23,18 +28,23 @@ public class Session {
     }
 
     public boolean associateSchema(SQLSchema schema) {
-        if (this.sessionSchemas.contains(schema)) {
+        if (this.sessionSchema != null) {
             return false;
         }
-        this.sessionSchemas.add(schema);
+        this.sessionSchema = schema.clone();
         return true;
     }
 
     public boolean isObsolete() {
-        return Duration.between(this.getInitiateDateTime(), LocalDateTime.now()).toDays() > 3;
+        return Duration.between(this.getInitiateDateTime(), LocalDateTime.now()).toDays() > 1;
     }
 
-    public ArrayList<SQLSchema> getSessionSchemas() {
-        return sessionSchemas;
+    public SQLSchema getSessionSchema() {
+        return sessionSchema;
+    }
+
+    @Override
+    public Session clone() {
+        return new Session(this.sessionID, this.initiateDateTime, this.sessionSchema);
     }
 }
