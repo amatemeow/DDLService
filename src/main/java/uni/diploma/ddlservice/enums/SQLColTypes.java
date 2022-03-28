@@ -5,13 +5,10 @@ public enum SQLColTypes {
     FLOAT("FLOAT"),
     CHAR("CHAR"),
     VARCHAR2("VARCHAR2(4000)"),
-    CLOB("CLOB"),
     DATE("DATE"),
-    TIMESTAMP("TIMESTAMP"),
-    RAW("RAW(2000)"),
-    BLOB("BLOB");
+    TIMESTAMP("TIMESTAMP");
 
-    private String representation;
+    private final String representation;
 
     SQLColTypes(String representation) {
         this.representation = representation;
