@@ -18,4 +18,8 @@ public enum SQLColTypes {
     public String toString() {
         return representation;
     }
+
+    public String toType() {
+        return super.toString();
+    }
 }
