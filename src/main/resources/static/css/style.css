@@ -1,0 +1,148 @@
+html {
+    font-family: "Roboto Light", sans-serif;
+}
+
+body {
+
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.align-center {
+    align-self: center;
+}
+
+.align-end {
+    align-self: end;
+}
+
+.flex-center {
+    justify-content: center;
+}
+
+.flex-even {
+    justify-content: space-evenly;
+}
+
+.flex-around {
+    justify-content: space-around;
+}
+
+.flex-between {
+    justify-content: space-between;
+}
+
+.w-1 {
+    width: 100%;
+}
+
+.w-200 {
+    width: 200px;
+}
+
+.w-400 {
+    width: 400px;
+}
+
+.w-800 {
+    width: 800px;
+}
+
+.ma-5 {
+    margin: 5px;
+}
+
+.ma-10 {
+    margin: 10px;
+}
+
+.mv-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.pa-5 {
+    padding: 5px;
+}
+
+.pa-10 {
+    padding: 10px;
+}
+
+.br-5 {
+    border-radius: 5px;
+}
+
+.br-10 {
+    border-radius: 10px;
+}
+
+.b-none {
+    border: none;
+}
+
+.b-white {
+    border-color: whitesmoke;
+}
+
+.b-s {
+    border-width: 2px;
+    border-style: solid;
+}
+
+.b-m {
+    border-width: 5px;
+    border-style: solid;
+}
+
+.b-l {
+    border-width: 8px;
+    border-style: solid;
+}
+
+.fs-10 {
+    font-size: 10pt;
+}
+
+.fs-12 {
+    font-size: 12pt;
+}
+
+.fs-14 {
+    font-size: 14pt;
+}
+
+.fs-16 {
+    font-size: 16pt;
+}
+
+.st-container-f {
+    background-color: #404040;
+    color: whitesmoke;
+}
+
+.st-container-b {
+    background-color: #222222;
+    color: whitesmoke;
+}
+
+.dw-btn {
+    border: none;
+    color: white;
+    /*transition-delay: 0.2s;*/
+    background-color: dodgerblue;
+}
+
+.dw-btn:hover {
+    transition: ease-in-out;
+    /*transition-delay: 0.2s;*/
+    background-color: deepskyblue;
+}
