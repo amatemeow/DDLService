@@ -1,13 +1,20 @@
 package uni.diploma.ddlservice.controllers;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uni.diploma.ddlservice.entities.*;
+import uni.diploma.ddlservice.enums.SQLConTypes;
 import uni.diploma.ddlservice.processing.DDLBuilder;
 import uni.diploma.ddlservice.processing.FileBuilder;
 import uni.diploma.ddlservice.processing.JSONDeserializer;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
@@ -29,7 +36,7 @@ public class APIController {
     }
 
     @GetMapping("/api/schema")
-    public SQLSchema getUserSchema(HttpSession session) {
+    public SQLSchema getSchema(HttpSession session) {
         return webSessions.stream().filter(s -> s.getSessionID().equals(session.getId()))
                 .findFirst().orElse(initiateNewSession(session)).getSessionSchema();
     }
@@ -66,6 +73,11 @@ public class APIController {
                 .findFirst().orElse(initiateNewSession(session)));
     }
 
+    @GetMapping("/api/types")
+    public ArrayList<SQLConTypes> gettypes() {
+        return new ArrayList<>(List.of(SQLConTypes.values()));
+    }
+
     //Optimize Exception
     //Fix empty file
     //Need to add auto file-deletion
@@ -79,5 +91,16 @@ public class APIController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @PostMapping ("/api/json/download")
+    public void getJsonScript(HttpServletResponse response, @RequestBody Map<String, Object> requestBody,
+                              HttpSession session) throws IOException, InterruptedException {
+        response.setContentType("application/sql");
+        response.setHeader("Content-Disposition","attachment; filename\"scriptDDL.sql\"");
+        FileBuilder fb = new FileBuilder(addSchema(requestBody, session), session.getId());
+        Files.copy(fb.getFile().toPath(), response.getOutputStream());
+        response.getOutputStream().flush();
+        fb.deleteFile();
     }
 }
