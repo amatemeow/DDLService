@@ -30,4 +30,9 @@ public class FileBuilder {
     public File getFile() {
         return file;
     }
+
+    public void deleteFile() throws InterruptedException {
+        Thread.sleep(100);
+        this.getFile().delete();
+    }
 }
