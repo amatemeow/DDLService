@@ -27,12 +27,8 @@ public class Session {
         return sessionID;
     }
 
-    public boolean associateSchema(SQLSchema schema) {
-        if (this.sessionSchema != null) {
-            return false;
-        }
+    public void associateSchema(SQLSchema schema) {
         this.sessionSchema = schema.clone();
-        return true;
     }
 
     public boolean isObsolete() {
