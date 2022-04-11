@@ -6,6 +6,62 @@ body {
 
 }
 
+.sticky {
+    position: sticky;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.top {
+    top: 0;
+}
+
+.left {
+    left: 0;
+}
+
+.bg-none {
+    background-color: transparent;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+.bg-dark {
+    background-color: #222222;
+}
+
+.bg-blue {
+    background-color: dodgerblue;
+}
+
+.bg-light {
+    background-color: #404040;
+}
+
+.bg-success {
+    background-color: #1d9300;
+}
+
+.bg-alert {
+    background-color: red;
+}
+
+.text-light {
+    color: whitesmoke;
+}
+
+.text-success {
+    color: #1d9300;
+}
+
+.text-alert {
+    color: red;
+}
+
 .flex-row {
     display: flex;
     flex-direction: row;
@@ -25,7 +81,7 @@ body {
 }
 
 .flex-center {
-    justify-content: center;
+    justify-content:  center;
 }
 
 .flex-even {
@@ -40,8 +96,21 @@ body {
     justify-content: space-between;
 }
 
+.wh-25 {
+    width: 50px;
+    height: auto;
+}
+
 .w-1 {
     width: 100%;
+}
+
+.w-50 {
+    width: 50px;
+}
+
+.w-100 {
+    width: 100px;
 }
 
 .w-200 {
@@ -56,6 +125,15 @@ body {
     width: 800px;
 }
 
+.w-fit {
+    width: fit-content;
+}
+
+.wh-fit {
+    width: fit-content;
+    height: fit-content;
+}
+
 .ma-5 {
     margin: 5px;
 }
@@ -67,6 +145,10 @@ body {
 .mv-auto {
     margin-top: auto;
     margin-bottom: auto;
+}
+
+.pa-0 {
+    padding: 0;
 }
 
 .pa-5 {
@@ -83,6 +165,10 @@ body {
 
 .br-10 {
     border-radius: 10px;
+}
+
+.br-round {
+    border-radius: 999px;
 }
 
 .b-none {
@@ -124,25 +210,51 @@ body {
     font-size: 16pt;
 }
 
-.st-container-f {
-    background-color: #404040;
-    color: whitesmoke;
-}
-
-.st-container-b {
-    background-color: #222222;
-    color: whitesmoke;
-}
-
 .dw-btn {
     border: none;
-    color: white;
-    /*transition-delay: 0.2s;*/
-    background-color: dodgerblue;
 }
 
-.dw-btn:hover {
+.hv-blue:hover {
     transition: ease-in-out;
-    /*transition-delay: 0.2s;*/
     background-color: deepskyblue;
+}
+
+.hv-success:hover {
+    transition: ease-in-out;
+    background-color: forestgreen;
+}
+
+.hv-alert:hover {
+    transition: ease-in-out;
+    background-color: orangered;
+}
+
+.rm-btn {
+    width: 30px;
+    height: auto;
+    border: none;
+    background-color: transparent;
+}
+
+.rm-btn:hover {
+    transition: ease-in-out;
+    color: orangered;
+}
+
+.sv-btn {
+    width: 30px;
+    height: auto;
+    border: none;
+}
+
+.sv-btn:hover {
+    transition: ease-in-out;
+    color: forestgreen;
+}
+
+.alert-box {
+    display: none;
+    opacity: 0;
+    transform: scale(0);
+    transition: .4s ease opacity, .4s ease transform;
 }
