@@ -30,8 +30,8 @@ public class JSONDeserializer {
             ArrayList<SQLConstraint> constraints = new ArrayList<>();
 
             for (LinkedHashMap<String, Object> column : requestColumns) {
-                columns.add(new SQLColumn((String) column.get("name"),
-                        SQLColTypes.valueOf((String) column.get("type"))));
+                columns.add(new SQLColumn((String) column.getOrDefault("name", ""),
+                        column.get("type") == null ? null : SQLColTypes.valueOf((String) column.get("type"))));
             }
 
             for (LinkedHashMap<String, Object> constraint : requestConstraints) {
@@ -44,8 +44,8 @@ public class JSONDeserializer {
                 }
 
                 constraints.add(new SQLConstraint(Optional.ofNullable((String) constraint.get("name")),
-                        SQLConTypes.valueOf((String) constraint.get("type")), (String) constraint.get("column"),
-                        Optional.ofNullable(reference)));
+                        constraint.get("type") == null ? null : SQLConTypes.valueOf((String) constraint.get("type")),
+                        (String) constraint.getOrDefault("column", ""), Optional.ofNullable(reference)));
             }
             tables.add(new SQLTable((String) table.get("tableName"), columns, constraints));
         }
