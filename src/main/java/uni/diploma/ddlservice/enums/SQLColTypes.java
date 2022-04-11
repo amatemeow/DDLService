@@ -1,25 +1,32 @@
 package uni.diploma.ddlservice.enums;
 
 public enum SQLColTypes {
-    NUMBER("NUMBER"),
-    FLOAT("FLOAT"),
-    CHAR("CHAR"),
-    VARCHAR2("VARCHAR2(4000)"),
-    DATE("DATE"),
-    TIMESTAMP("TIMESTAMP");
+    NUMBER("NUMBER", "INTEGER"),
+    FLOAT("FLOAT", "FLOAT"),
+    CHAR("CHAR", "CHARACTER"),
+    VARCHAR2("VARCHAR2(4000)", "STRING"),
+    DATE("DATE", "DATE"),
+    TIMESTAMP("TIMESTAMP", "DATE WITH TIME");
 
     private final String representation;
+    private final String casual;
 
-    SQLColTypes(String representation) {
+    SQLColTypes(String representation, String casual) {
         this.representation = representation;
+        this.casual = casual;
     }
 
     @Override
     public String toString() {
-        return representation;
+        return this.representation;
     }
 
     public String toType() {
         return super.toString();
+    }
+
+    public String toCasual() {
+        return this.representation.equals(this.casual)
+                ? this.representation : this.casual + " (" + this.representation + ")";
     }
 }
