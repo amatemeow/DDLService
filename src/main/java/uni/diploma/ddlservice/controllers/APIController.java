@@ -1,32 +1,24 @@
 package uni.diploma.ddlservice.controllers;
 
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uni.diploma.ddlservice.entities.*;
-import uni.diploma.ddlservice.enums.SQLConTypes;
 import uni.diploma.ddlservice.processing.DDLBuilder;
 import uni.diploma.ddlservice.processing.FileBuilder;
 import uni.diploma.ddlservice.processing.JSONDeserializer;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
+
+import static uni.diploma.ddlservice.DdlServiceApplication.webSessions;
 
 @RestController
 public class APIController {
 
-    private static final ConcurrentLinkedQueue<Session> webSessions = new ConcurrentLinkedQueue<>();
-
     @PostMapping("/api/newSession")
-    public Session initiateNewSession(HttpSession session) {
+    public static Session initiateNewSession(HttpSession session) {
         Session response = webSessions.stream().filter(s -> s.getSessionID().equals(session.getId()))
                 .findFirst().orElse(new Session(session.getId()));
         if (!webSessions.contains(response)) {
@@ -53,12 +45,12 @@ public class APIController {
     }
 
     @PostMapping("/api/schema/new")
-    public String addSchema(@RequestBody Map<String, Object> requestBody, HttpSession session) {
+    public SQLSchema addSchema(@RequestBody Map<String, Object> requestBody, HttpSession session) {
         SQLSchema schema = new JSONDeserializer(requestBody).deserialize();
         webSessions.stream().filter(s -> s.getSessionID().equals(session.getId()))
                 .findFirst().orElse(initiateNewSession(session)).associateSchema(schema);
 
-        return new DDLBuilder(schema).build();
+        return schema;
     }
 
     @GetMapping("/api/viewSession")
@@ -68,39 +60,24 @@ public class APIController {
     }
 
     @PostMapping("/api/dropSession")
-    public void dropSession(HttpSession session) {
+    public static void dropSession(HttpSession session) {
         webSessions.remove(webSessions.stream().filter(s -> s.getSessionID().equals(session.getId()))
                 .findFirst().orElse(initiateNewSession(session)));
     }
 
-    @GetMapping("/api/types")
-    public ArrayList<SQLConTypes> gettypes() {
-        return new ArrayList<>(List.of(SQLConTypes.values()));
-    }
-
     //Optimize Exception
     //Fix empty file
-    //Need to add auto file-deletion
     @GetMapping("/api/download")
     public void getScript(HttpServletResponse response, HttpSession session) throws IOException {
         try {
             response.setContentType("application/sql");
             response.setHeader("Content-Disposition","attachment; filename\"scriptDDL.sql\"");
-            Files.copy(new FileBuilder(getDDL(session), session.getId()).getFile().toPath(), response.getOutputStream());
+            FileBuilder fb = new FileBuilder(getDDL(session), session.getId());
+            Files.copy(fb.getFile().toPath(), response.getOutputStream());
             response.getOutputStream().flush();
+            fb.deleteFile();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    @PostMapping ("/api/json/download")
-    public void getJsonScript(HttpServletResponse response, @RequestBody Map<String, Object> requestBody,
-                              HttpSession session) throws IOException, InterruptedException {
-        response.setContentType("application/sql");
-        response.setHeader("Content-Disposition","attachment; filename\"scriptDDL.sql\"");
-        FileBuilder fb = new FileBuilder(addSchema(requestBody, session), session.getId());
-        Files.copy(fb.getFile().toPath(), response.getOutputStream());
-        response.getOutputStream().flush();
-        fb.deleteFile();
     }
 }
