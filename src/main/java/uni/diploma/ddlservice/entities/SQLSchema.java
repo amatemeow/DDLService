@@ -15,6 +15,12 @@ public class SQLSchema {
     @NonNull private ArrayList<SQLTable> tables;
     private boolean byRoot = false;
 
+    public SQLSchema() {
+        this.user = "";
+        this.tables = new ArrayList<>(
+                List.of(new SQLTable()));
+    }
+
     public SQLSchema(String user) {
         this.user = user;
     }

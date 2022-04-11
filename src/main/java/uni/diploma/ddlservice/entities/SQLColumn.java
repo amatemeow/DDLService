@@ -9,4 +9,9 @@ import uni.diploma.ddlservice.enums.SQLColTypes;
 public class SQLColumn {
     private String name;
     private SQLColTypes type;
+
+    public SQLColumn() {
+        this.name = "";
+        this.type = null;
+    }
 }

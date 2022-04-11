@@ -13,9 +13,15 @@ import java.util.Optional;
 @AllArgsConstructor
 public class SQLConstraint {
     private Optional<String> name = Optional.empty();
-    @NonNull private SQLConTypes type;
+    private SQLConTypes type;
     @NonNull private String column;
     private Optional<ForeignReference> reference = Optional.empty();
+
+    public SQLConstraint() {
+        this.name = Optional.of("");
+        this.type = null;
+        this.column = "";
+    }
 
     public SQLConstraint(Optional<String> name, SQLConTypes type, String column) {
         this.name = name;
