@@ -2,65 +2,27 @@ html {
     font-family: "Roboto Light", sans-serif;
 }
 
-body {
+.pos-sticky { position: sticky; }
 
-}
+.pos-absolute { position: absolute; }
 
-.sticky {
-    position: sticky;
-}
+.pos-top { top: 0; }
 
-.absolute {
-    position: absolute;
-}
+.pos-bottom { bottom: 0; }
 
-.top {
-    top: 0;
-}
+.pos-left { left: 0; }
 
-.left {
-    left: 0;
-}
+.bg-none { background-color: transparent; }
 
-.bg-none {
-    background-color: transparent;
-}
+.bg-white { background-color: white; }
 
-.bg-white {
-    background-color: white;
-}
+.bg-dark { background-color: #222222; }
 
-.bg-dark {
-    background-color: #222222;
-}
+.text-light { color: whitesmoke; }
 
-.bg-blue {
-    background-color: dodgerblue;
-}
+.text-success { color: #1d9300; }
 
-.bg-light {
-    background-color: #404040;
-}
-
-.bg-success {
-    background-color: #1d9300;
-}
-
-.bg-alert {
-    background-color: red;
-}
-
-.text-light {
-    color: whitesmoke;
-}
-
-.text-success {
-    color: #1d9300;
-}
-
-.text-alert {
-    color: red;
-}
+.text-alert { color: red; }
 
 .flex-row {
     display: flex;
@@ -72,188 +34,96 @@ body {
     flex-direction: column;
 }
 
-.align-center {
-    align-self: center;
-}
+.flex-center { justify-content: center; }
 
-.align-end {
-    align-self: end;
-}
+.flex-even { justify-content: space-evenly; }
 
-.flex-center {
-    justify-content:  center;
-}
+.flex-around { justify-content: space-around; }
 
-.flex-even {
-    justify-content: space-evenly;
-}
+.flex-between { justify-content: space-between; }
 
-.flex-around {
-    justify-content: space-around;
-}
+.align-center { align-self: center; }
 
-.flex-between {
-    justify-content: space-between;
-}
+.align-end { align-self: end; }
 
-.wh-25 {
-    width: 50px;
-    height: auto;
-}
+.w-1 { width: 100%; }
 
-.w-1 {
-    width: 100%;
-}
+.w-200 { width: 200px; }
 
-.w-50 {
-    width: 50px;
-}
+.w-400 { width: 400px; }
 
-.w-100 {
-    width: 100px;
-}
+.w-600 { width: 600px; }
 
-.w-200 {
-    width: 200px;
-}
+.w-800 { width: 800px; }
 
-.w-400 {
-    width: 400px;
-}
+.w-fit { width: fit-content; }
 
-.w-800 {
-    width: 800px;
-}
+.ma-5 { margin: 5px; }
 
-.w-fit {
-    width: fit-content;
-}
-
-.wh-fit {
-    width: fit-content;
-    height: fit-content;
-}
-
-.ma-5 {
-    margin: 5px;
-}
-
-.ma-10 {
-    margin: 10px;
-}
+.ma-10 { margin: 10px; }
 
 .mv-auto {
     margin-top: auto;
     margin-bottom: auto;
 }
 
-.pa-0 {
-    padding: 0;
-}
+.pa-0 { padding: 0; }
 
-.pa-5 {
-    padding: 5px;
-}
+.pa-5 { padding: 5px; }
 
-.pa-10 {
-    padding: 10px;
-}
+.pa-10 { padding: 10px; }
 
-.br-5 {
-    border-radius: 5px;
-}
+.br-5 { border-radius: 5px; }
 
-.br-10 {
-    border-radius: 10px;
-}
+.br-10 { border-radius: 10px; }
 
-.br-round {
-    border-radius: 999px;
-}
+.br-round { border-radius: 999px; }
 
-.b-none {
-    border: none;
-}
+.border-white { border-color: whitesmoke; }
 
-.b-white {
-    border-color: whitesmoke;
-}
-
-.b-s {
+.border-small {
     border-width: 2px;
     border-style: solid;
 }
 
-.b-m {
-    border-width: 5px;
-    border-style: solid;
-}
+.fs-10 { font-size: 10pt; }
 
-.b-l {
-    border-width: 8px;
-    border-style: solid;
-}
+.fs-12 { font-size: 12pt; }
 
-.fs-10 {
-    font-size: 10pt;
-}
+.fs-14 { font-size: 14pt; }
 
-.fs-12 {
-    font-size: 12pt;
-}
+.fs-16 { font-size: 16pt; }
 
-.fs-14 {
-    font-size: 14pt;
-}
-
-.fs-16 {
-    font-size: 16pt;
-}
-
-.dw-btn {
-    border: none;
-}
-
-.hv-blue:hover {
-    transition: ease-in-out;
-    background-color: deepskyblue;
-}
-
-.hv-success:hover {
-    transition: ease-in-out;
-    background-color: forestgreen;
-}
-
-.hv-alert:hover {
-    transition: ease-in-out;
-    background-color: orangered;
-}
-
-.rm-btn {
+.btn-remove {
     width: 30px;
     height: auto;
-    border: none;
+
     background-color: transparent;
-}
-
-.rm-btn:hover {
-    transition: ease-in-out;
-    color: orangered;
-}
-
-.sv-btn {
-    width: 30px;
-    height: auto;
     border: none;
 }
 
-.sv-btn:hover {
+.btn-remove:hover {
+    color: orangered;
+
     transition: ease-in-out;
+}
+
+.btn-save {
+    width: 30px;
+    height: auto;
+
+    border: none;
+}
+
+.btn-save:hover {
     color: forestgreen;
+
+    transition: ease-in-out;
 }
 
 .alert-box {
     display: none;
+
     opacity: 0;
     transform: scale(0);
     transition: .4s ease opacity, .4s ease transform;

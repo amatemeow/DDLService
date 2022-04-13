@@ -46,26 +46,26 @@ async function raiseAlert(id, duration) {
 
 function toggleReference(element) {
     if ($(element).val() === 'FOREIGN_KEY') {
-        $(element.parentNode.parentNode).find('.new-reference-block').toggle(true);
+        $(element.parentNode.parentNode).find('.js-reference-block').toggle(true);
     } else {
-        $(element.parentNode.parentNode).find('.new-reference-block').toggle(false);
+        $(element.parentNode.parentNode).find('.js-reference-block').toggle(false);
     }
 }
 
 async function process() {
     let schema = document.getElementById('new_schema');
 
-    let tables = document.getElementsByClassName('new_table_block');
+    let tables = document.getElementsByClassName('js-table-block');
 
     let raw = {};
-    raw.sqlSchema = document.getElementById('schema_name').value;
+    raw.sqlSchema = document.getElementById('schema_name').value || null;
     raw.byRoot = $(document.getElementById('is_root_check')).is(':checked');
-    raw.user = 'exampleUser';
-    raw.schemaName = 'CoolSchema';
+    raw.user = '';
+    raw.schemaName = '';
     let rawtables = [];
 
     [].forEach.call(tables, t => {
-        let columns = document.getElementsByClassName('new-col-block');
+        let columns = document.getElementsByClassName('js-col-block');
         let rawcols = [];
         [].forEach.call(columns, c => {
             rawcols.push({
@@ -73,14 +73,14 @@ async function process() {
                 'type': $(c).find('[name="columnType"]').val()
             });
         });
-        let constraints = document.getElementsByClassName('new-con-block');
+        let constraints = document.getElementsByClassName('js-con-block');
         let rawcons = [];
         [].forEach.call(constraints, c => {
             rawcons.push({
-                'name': $(c).find('[name="constraintName"]').val(),
+                'name': $(c).find('[name="constraintName"]').val() || null,
                 'type': $(c).find('[name="constraintType"]').val(),
                 'column': $(c).find('[name="constraintColumn"]').val(),
-                'reference': !$(c).find('.new-reference-block').is(':visible') ? null :
+                'reference': !$(c).find('.js-reference-block').is(':visible') ? null :
                     {
                     'referenceColumn': $(c).find('[name="referenceColumn"]').val(),
                     'referenceTable': $(c).find('[name="referenceTable"]').val()
@@ -95,7 +95,6 @@ async function process() {
 
     raw.tables = rawtables;
     let json = JSON.stringify(raw);
-    console.log(raw);
 
     const response = await fetch('/api/schema/new', {
         method: 'POST',
