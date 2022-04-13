@@ -65,7 +65,7 @@ async function process() {
     let rawtables = [];
 
     [].forEach.call(tables, t => {
-        let columns = document.getElementsByClassName('js-col-block');
+        let columns = $(t).find('.js-col-block');
         let rawcols = [];
         [].forEach.call(columns, c => {
             rawcols.push({
@@ -73,7 +73,7 @@ async function process() {
                 'type': $(c).find('[name="columnType"]').val()
             });
         });
-        let constraints = document.getElementsByClassName('js-con-block');
+        let constraints = $(t).find('.js-con-block');
         let rawcons = [];
         [].forEach.call(constraints, c => {
             rawcons.push({
