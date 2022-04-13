@@ -27,9 +27,9 @@ public class DDLBuilder {
         }
 
         for (SQLTable table : sourceSchema.getTables()) {
-            String createCurrent = "\n\n/*Creating table " + (cased ? "\"" + sourceSchema.getSqlSchema().get() + "\"." : "\"") +
+            String createCurrent = "\n\n/*Creating table " + (cased ? "\"" + sourceSchema.getSqlSchema().get() + "\"." : "") +
                     "\"" + table.getTableName() + "\"" + "*/" +
-                    "\nCREATE TABLE " + (cased ? "\"" + sourceSchema.getSqlSchema().get() + "\"." : "\"") +
+                    "\nCREATE TABLE " + (cased ? "\"" + sourceSchema.getSqlSchema().get() + "\"." : "") +
                     "\"" + table.getTableName() + "\"" + " \n(";
 
             for (SQLColumn column : table.getColumns()) {
@@ -39,9 +39,9 @@ public class DDLBuilder {
 
             /*NOT NULL ограничение будет закодировано как CHECK ограничение с условием IS NOT NULL*/
             for (SQLConstraint constraint : table.getConstraints()) {
-                createCurrent += ", \n" + "CONSTRAINT " + (cased && constraint.getName().isPresent() ? "" : "\"") +
+                createCurrent += ", \n" + "CONSTRAINT " + (constraint.getName().isPresent() ? "\"" : "") +
                         constraint.getName().orElse("") +
-                        (cased && constraint.getName().isPresent() ? "" : "\"") + " " +
+                        (constraint.getName().isPresent() ? "\" " : "") +
                         (SQLConTypes.NOTNULL == constraint.getType()
                                 ? SQLConTypes.CHECK.toString() + " (\"" + constraint.getColumn() + "\" IS NOT NULL)"
                                 : constraint.getType().toString() + " (\"" + constraint.getColumn() + "\")");
