@@ -12,16 +12,13 @@ import uni.diploma.ddlservice.enums.SQLConTypes;
 
 import javax.servlet.http.HttpSession;
 
-import static uni.diploma.ddlservice.DdlServiceApplication.webSessions;
-
 
 @RestController
 public class WebController {
 
     @GetMapping("/new")
     public ModelAndView newSchema(Model model, HttpSession session) {
-        Session localSession = webSessions.stream().filter(s -> s.getSessionID().equals(session.getId()))
-                .findFirst().orElse(null);
+        Session localSession = APIController.initiateNewSession(session);
         SQLSchema schema = localSession == null ? new SQLSchema() : localSession.getSessionSchema();
         model.addAttribute("coltypes", SQLColTypes.values());
         model.addAttribute("contypes", SQLConTypes.values());
