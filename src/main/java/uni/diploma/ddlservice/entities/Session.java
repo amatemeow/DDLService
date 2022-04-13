@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class Session {
     private final String sessionID;
     private final LocalDateTime initiateDateTime;
-    private SQLSchema sessionSchema = null;
+    private SQLSchema sessionSchema = new SQLSchema();
 
     public Session(String sessionID) {
         this.sessionID = sessionID;
