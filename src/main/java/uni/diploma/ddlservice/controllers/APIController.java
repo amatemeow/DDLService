@@ -8,7 +8,6 @@ import uni.diploma.ddlservice.processing.JSONDeserializer;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
@@ -27,11 +26,11 @@ public class APIController {
         return response;
     }
 
-    @GetMapping("/api/schema")
-    public SQLSchema getSchema(HttpSession session) {
-        return webSessions.stream().filter(s -> s.getSessionID().equals(session.getId()))
-                .findFirst().orElse(initiateNewSession(session)).getSessionSchema();
-    }
+//    @GetMapping("/api/schema")
+//    public SQLSchema getSchema(HttpSession session) {
+//        return webSessions.stream().filter(s -> s.getSessionID().equals(session.getId()))
+//                .findFirst().orElse(initiateNewSession(session)).getSessionSchema();
+//    }
 
     //Optimize with Custom Exception
     @GetMapping("/api/getDDL")
@@ -49,15 +48,14 @@ public class APIController {
         SQLSchema schema = new JSONDeserializer(requestBody).deserialize();
         webSessions.stream().filter(s -> s.getSessionID().equals(session.getId()))
                 .findFirst().orElse(initiateNewSession(session)).associateSchema(schema);
-
         return schema;
     }
 
-    @GetMapping("/api/viewSession")
-    public Session getSession(HttpSession session) {
-        return webSessions.stream().filter(s -> s.getSessionID().equals(session.getId()))
-                .findFirst().orElse(initiateNewSession(session));
-    }
+//    @GetMapping("/api/viewSession")
+//    public Session getSession(HttpSession session) {
+//        return webSessions.stream().filter(s -> s.getSessionID().equals(session.getId()))
+//                .findFirst().orElse(initiateNewSession(session));
+//    }
 
     @PostMapping("/api/dropSession")
     public static void dropSession(HttpSession session) {
@@ -68,7 +66,7 @@ public class APIController {
     //Optimize Exception
     //Fix empty file
     @GetMapping("/api/download")
-    public void getScript(HttpServletResponse response, HttpSession session) throws IOException {
+    public void getScript(HttpServletResponse response, HttpSession session) {
         try {
             response.setContentType("application/sql");
             response.setHeader("Content-Disposition","attachment; filename\"scriptDDL.sql\"");
