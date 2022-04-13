@@ -81,7 +81,7 @@
                             <div class="flex-col flex-even w-1 align-center">
                                 <div class="w-1 flex-row flex-between align-center">
                                     <input class="w-1 align-center fs-10 pa-5 br-5 border-white border-small" type="text"
-                                           name="constraintName" value="${constraint.name.get()}"
+                                           name="constraintName" value="${constraint.name.orElse("")}"
                                            placeholder="Constraint Name">
                                     <select class="align-center fs-10 pa-5 ma-5 br-5 border-white border-small"
                                             onchange="toggleReference(this)" name="constraintType" required>
