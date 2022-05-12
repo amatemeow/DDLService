@@ -16,7 +16,7 @@ public class DDLBuilder {
         boolean cased = sourceSchema.getSqlSchema().isPresent();
 
         /*Если указан пользователь БД (схема), и будет стоять галочка создания от лица администратора,
-        * тогда будет сгенерирован код на создание схемы этого пользователя и выделение ему основных привелегий
+        * тогда будет сгенерирован код на создание схемы этого пользователя и выделение ему основных привилегий
         * для работы с базой*/
         if (sourceSchema.isByRoot() && sourceSchema.getSqlSchema().isPresent()) {
             DDL.append(String.format("\n\n/*Creating a specified schema %1$s with password %1$s*/",
@@ -27,34 +27,39 @@ public class DDLBuilder {
         }
 
         for (SQLTable table : sourceSchema.getTables()) {
-            String createCurrent = "\n\n/*Creating table " + (cased ? "\"" + sourceSchema.getSqlSchema().get() + "\"." : "") +
-                    "\"" + table.getTableName() + "\"" + "*/" +
-                    "\nCREATE TABLE " + (cased ? "\"" + sourceSchema.getSqlSchema().get() + "\"." : "") +
-                    "\"" + table.getTableName() + "\"" + " \n(";
+            if (!"".equals(table.getTableName())) {
+                String createCurrent = "\n\n/*Creating table " + (cased ? "\"" + sourceSchema.getSqlSchema().get() + "\"." : "") +
+                        "\"" + table.getTableName() + "\"" + "*/" +
+                        "\nCREATE TABLE " + (cased ? "\"" + sourceSchema.getSqlSchema().get() + "\"." : "") +
+                        "\"" + table.getTableName() + "\"" + " \n(";
 
-            for (SQLColumn column : table.getColumns()) {
-                createCurrent += "\"" + column.getName() + "\" " + column.getType().toString() + ", \n";
-            }
-            createCurrent = createCurrent.substring(0, createCurrent.lastIndexOf(", \n"));
-
-            /*NOT NULL ограничение будет закодировано как CHECK ограничение с условием IS NOT NULL*/
-            for (SQLConstraint constraint : table.getConstraints()) {
-                createCurrent += ", \n" + "CONSTRAINT " + (constraint.getName().isPresent() ? "\"" : "") +
-                        constraint.getName().orElse("") +
-                        (constraint.getName().isPresent() ? "\" " : "") +
-                        (SQLConTypes.NOTNULL == constraint.getType()
-                                ? SQLConTypes.CHECK.toString() + " (\"" + constraint.getColumn() + "\" IS NOT NULL)"
-                                : constraint.getType().toString() + " (\"" + constraint.getColumn() + "\")");
-
-                if (constraint.getReference().isPresent()) {
-                    ForeignReference reference = constraint.getReference().get();
-                    createCurrent += " REFERENCES \"" + (sourceSchema.getSqlSchema().isPresent()
-                                    ? sourceSchema.getSqlSchema().get() + "\".\"" : "") +
-                            reference.getReferenceTable() + "\" (\"" + reference.getReferenceColumn() + "\")";
+                for (SQLColumn column : table.getColumns()) {
+                    if (!"".equals(column.getName())) {
+                        createCurrent += "\"" + column.getName() + "\" " + column.getType().toString() + ", \n";
+                    }
                 }
+                createCurrent = createCurrent.substring(0, createCurrent.lastIndexOf(", \n"));
+
+                for (SQLConstraint constraint : table.getConstraints()) {
+                    if (constraint.getType() != null) {
+                        createCurrent += ", \n" + "CONSTRAINT " + (constraint.getName().isPresent() ? "\"" : "") +
+                                constraint.getName().orElse("") +
+                                (constraint.getName().isPresent() ? "\" " : "") +
+                                (SQLConTypes.NOTNULL == constraint.getType()
+                                        ? SQLConTypes.CHECK.toString() + " (\"" + constraint.getColumn() + "\" IS NOT NULL)"
+                                        : constraint.getType().toString() + " (\"" + constraint.getColumn() + "\")");
+
+                        if (constraint.getReference().isPresent()) {
+                            ForeignReference reference = constraint.getReference().get();
+                            createCurrent += " REFERENCES \"" + (sourceSchema.getSqlSchema().isPresent()
+                                    ? sourceSchema.getSqlSchema().get() + "\".\"" : "") +
+                                    reference.getReferenceTable() + "\" (\"" + reference.getReferenceColumn() + "\")";
+                        }
+                    }
+                }
+                createCurrent += ");";
+                DDL.append(createCurrent);
             }
-            createCurrent += ");";
-            DDL.append(createCurrent);
         }
 
         return DDL.toString();
