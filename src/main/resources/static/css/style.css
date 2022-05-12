@@ -122,6 +122,8 @@ html {
 }
 
 .alert-box {
+    z-index: 999;
+
     display: none;
 
     opacity: 0;
