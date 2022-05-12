@@ -8,7 +8,12 @@ function newBlock(element) {
 }
 
 function removeBlock(element) {
-    element.parentNode.parentNode.remove();
+    let parent = element.parentNode.parentNode;
+    if (parent.parentNode.getElementsByClassName(parent.classList).length === 1) {
+        $(parent).toggle(false);
+    } else {
+        parent.remove();
+    }
 }
 
 function checkFields() {
@@ -82,9 +87,9 @@ async function process() {
                 'column': $(c).find('[name="constraintColumn"]').val(),
                 'reference': !$(c).find('.js-reference-block').is(':visible') ? null :
                     {
-                    'referenceColumn': $(c).find('[name="referenceColumn"]').val(),
-                    'referenceTable': $(c).find('[name="referenceTable"]').val()
-                }
+                        'referenceColumn': $(c).find('[name="referenceColumn"]').val(),
+                        'referenceTable': $(c).find('[name="referenceTable"]').val()
+                    }
             });
         });
         rawtables.push({
@@ -114,10 +119,24 @@ async function downloadScript() {
     const response = fetch('/api/download', {
         method: 'GET'
     }).then(resp => {
-        return resp.blob()
+        let flag = false
+        if (resp.status === 200) {
+            flag = true
+        }
+        return [flag, resp.status, resp.blob()]
+    }).then(data => {
+        if (data[0]) return data[2]
+        else alertOnError(data)
     }).then(blob => {
-        download(blob, 'scriptDDL.sql')
+        if (blob) download(blob, 'scriptDDL.sql')
     });
+}
+
+async function alertOnError(data) {
+    let el = document.querySelector("#alert-error");
+    el.innerHTML = "<p>" + "Status: " + data[1] + "</p>" + "<p>" + "Message: " + await (await data[2]).text() + "</p>";
+    await raiseAlert('alert-error', 5000);
+    el.innerHTML = "";
 }
 
 async function resetSession() {
