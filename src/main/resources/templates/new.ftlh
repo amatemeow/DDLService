@@ -16,9 +16,14 @@
     <title>New Schema</title>
 </head>
 <body class="flex-col bg-dark">
-    <div class="alert-box flex-row flex-center bg-white
-    text-success fs-12 pos-absolute pos-top pos-left ma-10 pa-10 br-5" id="alert-sv" >
-        <span>Saved!</span>
+    <div class="pos-absolute pos-top pos-left w-200">
+        <div class="alert-box flex-row flex-center bg-white
+            text-success fs-12 ma-10 pa-10 br-5" id="alert-sv" >
+            <span>Saved!</span>
+        </div>
+        <div class="alert-box flex-row flex-center bg-white
+            text-alert fs-12 ma-10 pa-10 br-5" id="alert-error" >
+        </div>
     </div>
     <form class="flex-col br-10 text-light" id="new_schema">
         <div class="pos-sticky pos-top flex-row align-center flex-center w-800 bg-dark">
@@ -45,7 +50,7 @@
                 <div class="flex-col flex-center align-center w-600">
                     <input class="align-center fs-10 w-200 pa-5 ma-10 br-5 border-white border-small" type="text" name="tableName"
                            value="${table.tableName}" placeholder="Table Name" required>
-                    <span class="align-center w-1 fs-12 ma-10">Columns:</span>
+                    <span class="align-center w-1 fs-12 ma-10 text-dark">Columns:</span>
                     <#list table.columns as column>
                         <div class="js-col-block flex-row flex-even ma-5 w-1 align-center">
                             <input class="columnName align-center fs-10 w-1 pa-5 br-5 border-white border-small" type="text"
@@ -75,7 +80,7 @@
                             onclick="newBlock(this)" type="button">
                         <i class="bi bi-plus-lg"></i>
                     </button>
-                    <span class="align-center w-1 fs-12 ma-10">Constraints:</span>
+                    <span class="align-center w-1 fs-12 ma-10 text-dark">Constraints:</span>
                     <#list table.constraints as constraint>
                         <div class="js-con-block flex-row flex-even w-1 ma-5 align-center">
                             <div class="flex-col flex-even w-1 align-center">
