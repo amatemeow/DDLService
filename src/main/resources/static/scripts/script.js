@@ -16,16 +16,27 @@ function removeBlock(element) {
     }
 }
 
-function checkFields() {
+async function checkFields() {
     let filled = true;
 
-    document.getElementById('new_schema').querySelectorAll('[required]').forEach(i => {
+    let requiredFields = document.getElementById('new_schema').querySelectorAll('[required]')
+
+    requiredFields.forEach(i => {
         if (!filled) return;
         if ($(i).is(':visible') && !i.value) filled = false;
     });
 
     if (!filled) {
-        alert('Please, fill all required fields!');
+        requiredFields.forEach(i => {
+            if (!$(i).val()) {
+                i.classList.remove('border-white');
+                i.classList.add('border-danger');
+            } else {
+                i.classList.remove('border-danger');
+                i.classList.add('border-white');
+            }
+        });
+        alertOnError([null, 400, 'Please, fill all required fields!']);
     }
     return filled;
 }
@@ -49,11 +60,16 @@ async function raiseAlert(id, duration) {
     },400);
 }
 
-function toggleReference(element) {
+function toggleConstraintOptional(element) {
     if ($(element).val() === 'FOREIGN_KEY') {
         $(element.parentNode.parentNode).find('.js-reference-block').toggle(true);
+        $(element.parentNode.parentNode).find('.js-check-block').toggle(false);
+    } else if ($(element).val() === 'CHECK') {
+        $(element.parentNode.parentNode).find('.js-check-block').toggle(true);
+        $(element.parentNode.parentNode).find('.js-reference-block').toggle(false);
     } else {
         $(element.parentNode.parentNode).find('.js-reference-block').toggle(false);
+        $(element.parentNode.parentNode).find('.js-check-block').toggle(false);
     }
 }
 
@@ -89,6 +105,11 @@ async function process() {
                     {
                         'referenceColumn': $(c).find('[name="referenceColumn"]').val(),
                         'referenceTable': $(c).find('[name="referenceTable"]').val()
+                    },
+                'check': !$(c).find('.js-check-block').is(':visible') ? null :
+                    {
+                        'type': $(c).find('[name="checkType"]').val(),
+                        'expression': $(c).find('[name="checkExpression"]').val()
                     }
             });
         });
@@ -113,7 +134,7 @@ async function process() {
 }
 
 async function downloadScript() {
-    if (!checkFields()) return;
+    if (!(await checkFields())) return;
     await process();
 
     const response = fetch('/api/download', {
@@ -134,7 +155,8 @@ async function downloadScript() {
 
 async function alertOnError(data) {
     let el = document.querySelector("#alert-error");
-    el.innerHTML = "<p>" + "Status: " + data[1] + "</p>" + "<p>" + "Message: " + await (await data[2]).text() + "</p>";
+    let msg = data[2] instanceof Promise ? await (await data[2]).text() : data[2];
+    el.innerHTML = "<p>" + "Status: " + data[1] + "</p>" + "<p>" + "Message: " + msg + "</p>";
     await raiseAlert('alert-error', 5000);
     el.innerHTML = "";
 }
