@@ -1,6 +1,7 @@
 package uni.diploma.ddlservice.processing;
 
 import uni.diploma.ddlservice.entities.*;
+import uni.diploma.ddlservice.enums.SQLCheckTypes;
 import uni.diploma.ddlservice.enums.SQLColTypes;
 import uni.diploma.ddlservice.enums.SQLConTypes;
 
@@ -36,6 +37,7 @@ public class JSONDeserializer {
 
             for (LinkedHashMap<String, Object> constraint : requestConstraints) {
                 ForeignReference reference = null;
+                CheckConstraint check = null;
                 if (constraint.get("reference") != null) {
                     LinkedHashMap<String, Object> requestReference =
                             (LinkedHashMap<String, Object>) constraint.get("reference");
@@ -43,9 +45,17 @@ public class JSONDeserializer {
                             (String) requestReference.get("referenceColumn"));
                 }
 
+                if (constraint.get("check") != null) {
+                    LinkedHashMap<String, Object> requestCheck =
+                            (LinkedHashMap<String, Object>) constraint.get("check");
+                    check = new CheckConstraint(SQLCheckTypes.valueOf((String) requestCheck.get("type")),
+                            (String) requestCheck.get("expression"));
+                }
+
                 constraints.add(new SQLConstraint(Optional.ofNullable((String) constraint.get("name")),
                         constraint.get("type") == null ? null : SQLConTypes.valueOf((String) constraint.get("type")),
-                        (String) constraint.getOrDefault("column", ""), Optional.ofNullable(reference)));
+                        (String) constraint.getOrDefault("column", ""), Optional.ofNullable(reference),
+                        Optional.ofNullable(check)));
             }
             tables.add(new SQLTable((String) table.get("tableName"), columns, constraints));
         }

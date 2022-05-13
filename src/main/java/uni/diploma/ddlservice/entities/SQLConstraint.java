@@ -16,6 +16,7 @@ public class SQLConstraint {
     private SQLConTypes type;
     @NonNull private String column;
     private Optional<ForeignReference> reference = Optional.empty();
+    private Optional<CheckConstraint> check = Optional.empty();
 
     public SQLConstraint() {
         this.name = Optional.of("");
@@ -29,9 +30,11 @@ public class SQLConstraint {
         this.column = column;
     }
 
-    public SQLConstraint(SQLConTypes type, String column, Optional<ForeignReference> reference) {
+    public SQLConstraint(SQLConTypes type, String column, Optional<ForeignReference> reference,
+                         Optional<CheckConstraint> check) {
         this.type = type;
         this.column = column;
         this.reference = reference;
+        this.check = check;
     }
 }

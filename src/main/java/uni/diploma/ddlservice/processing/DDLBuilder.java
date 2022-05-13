@@ -1,6 +1,7 @@
 package uni.diploma.ddlservice.processing;
 
 import uni.diploma.ddlservice.entities.*;
+import uni.diploma.ddlservice.enums.SQLCheckTypes;
 import uni.diploma.ddlservice.enums.SQLConTypes;
 
 //НУЖНО ДОБАВИТЬ ОБРАБОТКУ CHECK!!!
@@ -42,12 +43,21 @@ public class DDLBuilder {
 
                 for (SQLConstraint constraint : table.getConstraints()) {
                     if (constraint.getType() != null) {
+                        CheckConstraint checkConstraint = null;
+                        if (constraint.getCheck().isPresent()) {
+                            checkConstraint = constraint.getCheck().get();
+                        }
                         createCurrent += ", \n" + "CONSTRAINT " + (constraint.getName().isPresent() ? "\"" : "") +
                                 constraint.getName().orElse("") +
                                 (constraint.getName().isPresent() ? "\" " : "") +
                                 (SQLConTypes.NOTNULL == constraint.getType()
                                         ? SQLConTypes.CHECK.toString() + " (\"" + constraint.getColumn() + "\" IS NOT NULL)"
-                                        : constraint.getType().toString() + " (\"" + constraint.getColumn() + "\")");
+                                        : constraint.getType().toString() + " (\"" + constraint.getColumn() + "\"" +
+                                        (SQLConTypes.CHECK == constraint.getType() & checkConstraint != null ? " " +
+                                                checkConstraint.getType().toString() + " " +
+                                                (SQLCheckTypes.LIKE == checkConstraint.getType() ? "'" : "" ) +
+                                                checkConstraint.getExpression() +
+                                                (SQLCheckTypes.LIKE == checkConstraint.getType() ? "'" : "" ) : "") + ")");
 
                         if (constraint.getReference().isPresent()) {
                             ForeignReference reference = constraint.getReference().get();
