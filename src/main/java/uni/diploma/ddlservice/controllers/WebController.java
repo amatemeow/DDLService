@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import uni.diploma.ddlservice.entities.SQLSchema;
 import uni.diploma.ddlservice.entities.Session;
+import uni.diploma.ddlservice.enums.SQLCheckTypes;
 import uni.diploma.ddlservice.enums.SQLColTypes;
 import uni.diploma.ddlservice.enums.SQLConTypes;
 
@@ -22,6 +23,7 @@ public class WebController {
         SQLSchema schema = localSession == null ? new SQLSchema() : localSession.getSessionSchema();
         model.addAttribute("coltypes", SQLColTypes.values());
         model.addAttribute("contypes", SQLConTypes.values());
+        model.addAttribute("checktypes", SQLCheckTypes.values());
         model.addAttribute("schema", schema);
         return new ModelAndView("new");
     }
