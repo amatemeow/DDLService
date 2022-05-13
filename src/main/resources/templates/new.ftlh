@@ -13,31 +13,35 @@
             crossorigin="anonymous"></script>
     <script src="<@spring.url '/scripts/download.js'/>"></script>
     <script src="<@spring.url '/scripts/script.js'/>"></script>
-    <title>New Schema</title>
+    <title>DDLService - New Schema</title>
 </head>
 <body class="flex-col bg-dark">
-    <div class="pos-absolute pos-top pos-left w-200">
-        <div class="alert-box flex-row flex-center bg-white
+    <div class="z-highest pos-fixed">
+        <div class="pos-sticky pos-top pos-left w-300">
+            <div class="alert-box flex-row flex-center bg-white
             text-success fs-12 ma-10 pa-10 br-5" id="alert-sv" >
-            <span>Saved!</span>
-        </div>
-        <div class="alert-box flex-row flex-center bg-white
+                <span>Saved!</span>
+            </div>
+            <div class="alert-box flex-row flex-center bg-white
             text-alert fs-12 ma-10 pa-10 br-5" id="alert-error" >
+            </div>
         </div>
     </div>
-    <form class="flex-col br-10 text-light" id="new_schema">
-        <div class="pos-sticky pos-top flex-row align-center flex-center w-800 bg-dark">
-            <div class="flex-row">
-                <button class="btn-save bg-none fs-16 ma-5 text-success pa-0" onclick="process()" type="button">
-                    <i class="bi bi-cloud-check-fill"></i>
-                </button>
-                <input class="ma-5 pa-5 br-5 fs-12" id="schema_name" name="schemaName"
-                       value="${schema.sqlSchema.orElse("")}" type="text" placeholder="SQL Schema Name">
-            </div>
-            <div class="flex-row ma-5 mv-auto">
-                <input class="mv-auto" id="is_root_check" name="Database Administrator" value="asRoot" type="checkbox"
-                       <#if schema.byRoot>checked</#if>>
-                <label class="fs-12" for="is_root_check">DBA</label>
+    <form class="pos-relative flex-col br-10 text-light" id="new_schema">
+        <div class="pos-sticky pos-top flex-row align-center w-400 z-high pa-10">
+            <div class="flex-row align-center flex-center w-1 bg-dark br-10">
+                <div class="flex-row">
+                    <button class="btn-save bg-none fs-16 ma-5 text-success pa-0" onclick="process()" type="button">
+                        <i class="bi bi-cloud-check-fill"></i>
+                    </button>
+                    <input class="ma-5 pa-5 br-5 fs-12" id="schema_name" name="schemaName"
+                           value="${schema.sqlSchema.orElse("")}" type="text" placeholder="SQL Schema Name">
+                </div>
+                <div class="flex-row ma-5 mv-auto">
+                    <input class="mv-auto" id="is_root_check" name="Database Administrator" value="asRoot" type="checkbox"
+                           <#if schema.byRoot>checked</#if>>
+                    <label class="fs-12" for="is_root_check">DBA</label>
+                </div>
             </div>
         </div>
         <#list schema.tables as table>
@@ -89,7 +93,7 @@
                                            name="constraintName" value="${constraint.name.orElse("")}"
                                            placeholder="Constraint Name">
                                     <select class="align-center fs-10 pa-5 ma-5 br-5 border-white border-small"
-                                            onchange="toggleReference(this)" name="constraintType" required>
+                                            onchange="toggleConstraintOptional(this)" name="constraintType" required>
                                         <option class="pa-5" <#if !constraint.type?has_content>selected</#if> disabled>
                                             select constraint type...
                                         </option>
@@ -118,6 +122,28 @@
                                                 ${constraint.reference.get().referenceColumn}</#if>"
                                            style="margin-right: 0" required>
                                 </div>
+                                <!-- AAAAAAAAAAAAAAAAAAAAAAAAAAA-->
+                                <div class="js-check-block w-1 flex-row flex-between align-center"
+                                     <#if constraint.check.isEmpty()>style="display: none"</#if>>
+                                    <select class="align-center fs-10 pa-5 ma-5 br-5 border-white border-small"
+                                        name="checkType" required>
+                                        <option class="pa-5" <#if constraint.check.isEmpty()>selected</#if> disabled>
+                                            select check option...
+                                        </option>
+                                        <#list checktypes as checktype>
+                                            <option value="${checktype.toType()}"
+                                                    <#if constraint.check.isPresent() &&
+                                                    checktype.toType() == constraint.check.get().type.toType()>selected</#if>>
+                                                ${checktype.toString()}
+                                            </option>
+                                        </#list>
+                                    </select>
+                                    <input class="w-1 align-center fs-10 ma-5 pa-5 br-5 border-white border-small"
+                                           type="text" name="checkExpression" placeholder="Check Expression"
+                                           value="<#if constraint.check.isPresent()>${constraint.check.get().expression}</#if>"
+                                           style="margin-right: 0" required>
+                                </div>
+                                <!-- AAAAAAAAAAAAAAAAAAAAAAAAA-->
                             </div>
                             <div class="align-center flex-col">
                                 <button class="btn-remove fs-14 ma-5 text-alert w-fit pa-0"
@@ -149,5 +175,10 @@
             </button>
         </div>
     </form>
+    <footer class="pos-bottom flex-row align-center flex-center text-muted bg-dark">
+        <span class="ma-10">SPbSTU, Computer Science, 3530203/80102, Lapin Igor</span>
+        <span class="ma-10">DDLService - Bachelor's Graduation Project</span>
+        <span class="ma-10"><a href="https://github.com/amaterasuzxc/DDLService">GITHUB</a></span>
+    </footer>
 </body>
 </html>
