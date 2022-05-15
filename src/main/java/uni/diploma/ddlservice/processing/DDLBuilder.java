@@ -19,7 +19,7 @@ public class DDLBuilder {
         /*Если указан пользователь БД (схема), и будет стоять галочка создания от лица администратора,
         * тогда будет сгенерирован код на создание схемы этого пользователя и выделение ему основных привилегий
         * для работы с базой*/
-        if (sourceSchema.isByRoot() && sourceSchema.getSqlSchema().isPresent()) {
+        if (sourceSchema.isByRoot() && cased) {
             DDL.append(String.format("\n\n/*Creating a specified schema %1$s with password %1$s*/",
                     sourceSchema.getSqlSchema().get()));
             DDL.append(String.format("\nCREATE USER %1$s IDENTIFIED BY %1$s;", sourceSchema.getSqlSchema().get()));
@@ -50,7 +50,7 @@ public class DDLBuilder {
                         createCurrent += ", \n" + "CONSTRAINT " + (constraint.getName().isPresent() ? "\"" : "") +
                                 constraint.getName().orElse("") +
                                 (constraint.getName().isPresent() ? "\" " : "") +
-                                (SQLConTypes.NOTNULL == constraint.getType()
+                                 (SQLConTypes.NOTNULL == constraint.getType()
                                         ? SQLConTypes.CHECK.toString() + " (\"" + constraint.getColumn() + "\" IS NOT NULL)"
                                         : constraint.getType().toString() + " (\"" + constraint.getColumn() + "\"" +
                                         (SQLConTypes.CHECK == constraint.getType() & checkConstraint != null ? " " +
