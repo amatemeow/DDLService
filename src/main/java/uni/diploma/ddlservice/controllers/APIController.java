@@ -29,13 +29,6 @@ public class APIController {
         return response;
     }
 
-//    @GetMapping("/api/schema")
-//    public SQLSchema getSchema(HttpSession session) {
-//        return webSessions.stream().filter(s -> s.getSessionID().equals(session.getId()))
-//                .findFirst().orElse(initiateNewSession(session)).getSessionSchema();
-//    }
-
-    //Optimize with Custom Exception
     @GetMapping("/api/getDDL")
     public String getDDL(HttpSession session) {
         try {
@@ -54,20 +47,12 @@ public class APIController {
         return schema;
     }
 
-//    @GetMapping("/api/viewSession")
-//    public Session getSession(HttpSession session) {
-//        return webSessions.stream().filter(s -> s.getSessionID().equals(session.getId()))
-//                .findFirst().orElse(initiateNewSession(session));
-//    }
-
     @PostMapping("/api/dropSession")
     public static void dropSession(HttpSession session) {
         webSessions.remove(webSessions.stream().filter(s -> s.getSessionID().equals(session.getId()))
                 .findFirst().orElse(initiateNewSession(session)));
     }
 
-    //Optimize Exception
-    //Fix empty file
     @GetMapping("/api/download")
     public void getScript(HttpServletResponse response, HttpSession session) throws IOException {
         try {
