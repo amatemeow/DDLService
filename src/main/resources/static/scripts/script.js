@@ -61,20 +61,20 @@ async function raiseAlert(id, duration) {
 }
 
 function toggleConstraintOptional(element) {
+    let parent = element.parentNode.parentNode;
     if ($(element).val() === 'FOREIGN_KEY') {
-        $(element.parentNode.parentNode).find('.js-reference-block').toggle(true);
-        $(element.parentNode.parentNode).find('.js-check-block').toggle(false);
+        $(parent).find('.js-reference-block').toggle(true);
+        $(parent).find('.js-check-block').toggle(false);
     } else if ($(element).val() === 'CHECK') {
-        $(element.parentNode.parentNode).find('.js-check-block').toggle(true);
-        $(element.parentNode.parentNode).find('.js-reference-block').toggle(false);
+        $(parent).find('.js-check-block').toggle(true);
+        $(parent).find('.js-reference-block').toggle(false);
     } else {
-        $(element.parentNode.parentNode).find('.js-reference-block').toggle(false);
-        $(element.parentNode.parentNode).find('.js-check-block').toggle(false);
+        $(parent).find('.js-reference-block').toggle(false);
+        $(parent).find('.js-check-block').toggle(false);
     }
 }
 
 async function process() {
-    let schema = document.getElementById('new_schema');
 
     let tables = document.getElementsByClassName('js-table-block');
 
