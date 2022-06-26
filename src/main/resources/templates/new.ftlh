@@ -34,7 +34,7 @@
                     <button class="btn-save bg-none fs-16 ma-5 text-success pa-0" onclick="process()" type="button">
                         <i class="bi bi-cloud-check-fill"></i>
                     </button>
-                    <input class="ma-5 pa-5 br-5 fs-12" id="schema_name" name="schemaName"
+                    <input class="ma-5 pa-5 br-5 fs-12 bg-light text-dark border-none" id="schema_name" name="schemaName"
                            value="${schema.sqlSchema.orElse("")}" type="text" placeholder="SQL Schema Name">
                 </div>
                 <div class="flex-row ma-5 mv-auto">
@@ -52,14 +52,14 @@
                     </button>
                 </div>
                 <div class="flex-col flex-center align-center w-600">
-                    <input class="align-center fs-10 w-200 pa-5 ma-10 br-5 border-white border-small" type="text" name="tableName"
+                    <input class="align-center fs-12 w-200 pa-5 ma-10 br-5 border-small border-none bg-dark text-semilight" type="text" name="tableName"
                            value="${table.tableName}" placeholder="Table Name" required>
                     <span class="align-center w-1 fs-12 ma-10 text-dark">Columns:</span>
                     <#list table.columns as column>
                         <div class="js-col-block flex-row flex-even ma-5 w-1 align-center">
-                            <input class="columnName align-center fs-10 w-1 pa-5 br-5 border-white border-small" type="text"
+                            <input class="columnName align-center fs-10 w-1 pa-5 br-5 border-small border-none bg-dark text-semilight" type="text"
                                    name="columnName" value="${column.name}" placeholder="Column Name" required>
-                            <select class="columnType align-center fs-10 w-1 pa-5 ma-5 br-5 border-white border-small"
+                            <select class="columnType align-center fs-10 w-1 pa-5 ma-5 br-5 border-small border-none bg-dark text-semilight"
                                     name="columnType" required>
                                 <option class="pa-5" <#if !column.type?has_content>selected</#if> disabled>
                                     select column type...
@@ -89,10 +89,10 @@
                         <div class="js-con-block flex-row flex-even w-1 ma-5 align-center">
                             <div class="flex-col flex-even w-1 align-center">
                                 <div class="w-1 flex-row flex-between align-center">
-                                    <input class="w-1 align-center fs-10 pa-5 br-5 border-white border-small" type="text"
+                                    <input class="w-1 align-center fs-10 pa-5 br-5 border-small border-none bg-dark text-semilight" type="text"
                                            name="constraintName" value="${constraint.name.orElse("")}"
                                            placeholder="Constraint Name">
-                                    <select class="align-center fs-10 pa-5 ma-5 br-5 border-white border-small"
+                                    <select class="align-center fs-10 pa-5 ma-5 br-5 border-small border-none bg-dark text-semilight"
                                             onchange="toggleConstraintOptional(this)" name="constraintType" required>
                                         <option class="pa-5" <#if !constraint.type?has_content>selected</#if> disabled>
                                             select constraint type...
@@ -105,27 +105,26 @@
                                             </option>
                                         </#list>
                                     </select>
-                                    <input class="w-1 align-center fs-10 pa-5 br-5 border-white border-small" type="text"
+                                    <input class="w-1 align-center fs-10 pa-5 br-5 border-small border-none bg-dark text-semilight" type="text"
                                            name="constraintColumn" value="${constraint.column}"
                                            placeholder="Constraint Column" required>
                                 </div>
                                 <div class="js-reference-block w-1 flex-row flex-between align-center"
                                     <#if constraint.reference.isEmpty()>style="display: none"</#if>>
-                                    <input class="w-1 align-center fs-10 ma-5 pa-5 br-5 border-white border-small"
+                                    <input class="w-1 align-center fs-10 ma-5 pa-5 br-5 border-small border-none bg-dark text-semilight"
                                            type="text" name="referenceTable" placeholder="Reference Table"
                                            value="<#if constraint.reference.isPresent()>
                                                 ${constraint.reference.get().referenceTable}</#if>"
                                            style="margin-left: 0" required>
-                                    <input class="w-1 align-center fs-10 ma-5 pa-5 br-5 border-white border-small"
+                                    <input class="w-1 align-center fs-10 ma-5 pa-5 br-5 border-small border-none bg-dark text-semilight"
                                            type="text" name="referenceColumn" placeholder="Reference Column"
                                            value="<#if constraint.reference.isPresent()>
                                                 ${constraint.reference.get().referenceColumn}</#if>"
                                            style="margin-right: 0" required>
                                 </div>
-                                <!-- AAAAAAAAAAAAAAAAAAAAAAAAAAA-->
                                 <div class="js-check-block w-1 flex-row flex-between align-center"
                                      <#if constraint.check.isEmpty()>style="display: none"</#if>>
-                                    <select class="align-center fs-10 pa-5 ma-5 br-5 border-white border-small"
+                                    <select class="align-center fs-10 pa-5 ma-5 br-5 border-small border-none bg-dark text-semilight"
                                         name="checkType" required>
                                         <option class="pa-5" <#if constraint.check.isEmpty()>selected</#if> disabled>
                                             select check option...
@@ -138,12 +137,11 @@
                                             </option>
                                         </#list>
                                     </select>
-                                    <input class="w-1 align-center fs-10 ma-5 pa-5 br-5 border-white border-small"
+                                    <input class="w-1 align-center fs-10 ma-5 pa-5 br-5 border-small border-none bg-dark text-semilight"
                                            type="text" name="checkExpression" placeholder="Check Expression"
                                            value="<#if constraint.check.isPresent()>${constraint.check.get().expression}</#if>"
                                            style="margin-right: 0" required>
                                 </div>
-                                <!-- AAAAAAAAAAAAAAAAAAAAAAAAA-->
                             </div>
                             <div class="align-center flex-col">
                                 <button class="btn-remove fs-14 ma-5 text-alert w-fit pa-0"

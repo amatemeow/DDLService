@@ -4,7 +4,6 @@ import uni.diploma.ddlservice.entities.*;
 import uni.diploma.ddlservice.enums.SQLCheckTypes;
 import uni.diploma.ddlservice.enums.SQLConTypes;
 
-//НУЖНО ДОБАВИТЬ ОБРАБОТКУ CHECK!!!
 public class DDLBuilder {
     private final StringBuilder DDL = new StringBuilder();
     private final SQLSchema sourceSchema; //If initial object gone missing while executing

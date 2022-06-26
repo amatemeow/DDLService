@@ -29,11 +29,11 @@ async function checkFields() {
     if (!filled) {
         requiredFields.forEach(i => {
             if (!$(i).val()) {
-                i.classList.remove('border-white');
+                i.classList.remove('border-none');
                 i.classList.add('border-danger');
             } else {
                 i.classList.remove('border-danger');
-                i.classList.add('border-white');
+                i.classList.add('border-none');
             }
         });
         alertOnError([null, 400, 'Please, fill all required fields!']);
@@ -116,7 +116,7 @@ async function process() {
         rawtables.push({
             'tableName': $(t).find('[name="tableName"]').val(),
             'columns': rawcols, 'constraints': rawcons
-        })
+        });
     });
 
     raw.tables = rawtables;

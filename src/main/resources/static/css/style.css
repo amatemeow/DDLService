@@ -39,6 +39,8 @@ footer {
 
 .text-light { color: whitesmoke; }
 
+.text-semilight { color: lightgray; }
+
 .text-success { color: #1d9300; }
 
 .text-alert { color: red; }
@@ -103,6 +105,10 @@ footer {
 .border-small {
     border-width: 2px;
     border-style: solid;
+}
+
+.border-none {
+    border: none;
 }
 
 .fs-10 { font-size: 10pt; }
