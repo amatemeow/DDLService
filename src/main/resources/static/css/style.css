@@ -45,6 +45,8 @@ footer {
 
 .text-alert { color: red; }
 
+.text-lime { color: lime; }
+
 .flex-row {
     display: flex;
     flex-direction: row;
