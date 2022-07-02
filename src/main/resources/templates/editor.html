@@ -1,0 +1,192 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style_tailwind.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script th:src="@{/scripts/download.js}"></script>
+    <script th:src="@{/scripts/script.js}"></script>
+
+    <title th:text="${title}"></title>
+</head>
+<body class="flex flex-col relative w-screen h-screen justify-center items-center bg-gray-900 text-slate-100">
+<header class="sticky z-50 min-w-fit max-w-lg top-0 p-2">
+    <nav class="relative min-w-full bg-slate-800 rounded shadow-md shadow-[rgba(1,1,1,0.2)]">
+        <ul class="relative flex flex-row">
+            <li class="relative flex flex-row gap-2 p-3 items-center justify-center text-sm">
+                <a href="#" class="absolute top-0 left-0 h-full w-full"></a>
+                <span>DDLService</span>
+            </li>
+            <li class="border-l-[1px] border-slate-100 my-2"></li>
+            <li class="relative flex flex-row gap-2 p-3 items-center justify-center text-sm
+                            transition group hover:text-slate-800 hover:bg-slate-100">
+                <a href="projects.html" class="absolute top-0 left-0 h-full w-full"></a>
+                <span class="absolute inline-block invisible bottom-1 w-3 h-1 rounded bg-slate-800 transition group-hover:visible"></span>
+                <i class="bi bi-collection-fill text-base"></i>
+                <span>My Projects</span>
+            </li>
+            <li class="relative flex flex-row gap-2 p-3 items-center justify-center text-sm rounded-r
+                            transition group hover:text-slate-800 hover:bg-slate-100">
+                <a href="#" class="absolute top-0 left-0 h-full w-full"></a>
+                <span class="absolute inline-block invisible bottom-1 w-3 h-1 rounded bg-slate-800 transition group-hover:visible"></span>
+                <i class="bi bi-box-arrow-right text-base"></i>
+                <span>Sign Out</span>
+            </li>
+            <li class="relative flex flex-row gap-2 p-3 items-center justify-center text-sm rounded-r
+                            transition group hover:text-slate-800 hover:bg-slate-100">
+                <a href="login.html" class="absolute top-0 left-0 h-full w-full"></a>
+                <span class="absolute inline-block invisible bottom-1 w-3 h-1 rounded bg-slate-800 transition group-hover:visible"></span>
+                <i class="bi bi-box-arrow-in-left text-base"></i>
+                <span>Log In</span>
+            </li>
+        </ul>
+    </nav>
+</header>
+<div class="relative h-full w-screen" id="main">
+    <form class="relative w-full h-full flex flex-row" id="new_schema">
+        <div class="relative top-5 h-fit w-full flex flex-row flex-wrap gap-y-3 justify-evenly px-10 py-2 text-slate-100
+                text-xs overflow-y-auto scroll-smooth" id="tables">
+            <div class="relative min-w-xs max-w-xs h-52 p-3 bg-slate-800 flex flex-col gap-2 rounded shadow-md
+                    shadow-[rgba(1,1,1,0.2)] transition duration-300 hover:cursor-pointer hover:bg-[rgb(25,35,60,1)]
+                    hover:scale-105 js-table-block" th:each="table : ${schema.getTables()}">
+                <div class="relative w-full flex flex-row gap-2 text-center">
+                    <input class="relative w-11/12 bg-transparent placeholder:text-slate-400 focus:outline-none"
+                           placeholder="Table name" th:value="${table.getTableName()}" name="tableName">
+                    <i class="bi bi-x w-1/12 text-xl text-red-400 hover:cursor-pointer hover:text-red-500"
+                       onclick="removeBlock(this)"></i>
+                </div>
+                <hr class="border-slate-600">
+                <div class="relative flex flex-col gap-1 min-h-0 h-full">
+                    <div class="relative h-1/2 flex flex-col gap-2 overflow-y-auto">
+                        <div class="relative flex flex-row gap-1 justify-between text-center items-center js-col-block"
+                                th:each="column : ${table.getColumns()}">
+                            <input class="bg-transparent w-4/12 placeholder:text-slate-400 focus:outline-none"
+                                   placeholder="Column name" name="columnName" th:value="${column.getName()}">
+                            <select class="bg-transparent text-slate-400 w-3/12 focus:outline-none hover:cursor-pointer"
+                                    name="columnType">
+                                <option th:selected="${column.getType() == null}" disabled>Type</option>
+                                <option th:each="colType : ${coltypes}" th:value="${colType.toType()}"
+                                        th:text="${colType.toCasual()}" th:selected="${colType.toType() ==
+                                            (column.getType() == null ? '' : column.getType().toType())}"></option>
+                            </select>
+                            <input class="bg-transparent w-4/12 placeholder:text-slate-400 focus:outline-none"
+                                   placeholder="Default" name="columnDefault">
+                            <span class="relative w-1/12 text-base text-slate-400 hover:cursor-pointer hover:text-slate-100">
+                                <i class="bi bi-x" onclick="removeBlock(this)"></i>
+                            </span>
+                        </div>
+                        <span class="relative self-center flex items-center justify-center w-1/5 max-w-full border-[1px] rounded border-slate-400
+                            transition text-slate-400 hover:cursor-pointer hover:bg-slate-100 hover:border-slate-100 hover:text-slate-800"
+                              onclick="newBlock(this)">
+                        <i class="bi bi-plus text-base"></i>
+                    </span>
+                    </div>
+                    <hr class="border-slate-600">
+                    <div class="relative h-1/2 flex flex-col gap-2 overflow-y-auto">
+                        <div class="relative flex flex-col gap-1 text-center items-center js-con-block"
+                                th:each="constraint : ${table.getConstraints()}">
+                            <div class="relative w-full flex flex-row gap-1 justify-between">
+                                <input class="bg-transparent w-4/12 placeholder:text-slate-400 focus:outline-none"
+                                       placeholder="Constraint name" name="constraintName">
+                                <select class="bg-transparent text-slate-400 w-3/12 focus:outline-none hover:cursor-pointer"
+                                        name="constraintType" onchange="toggleConstraintOptional(this)">
+                                    <option th:selected="${constraint.getType() == null}" disabled>Type</option>
+                                    <option th:each="conType : ${contypes}" th:value="${conType.toType()}"
+                                            th:text="${conType.toString()}" th:selected="${conType.toType() ==
+                                                (constraint.getType() == null ? '' : constraint.getType().toType())}"></option>
+                                </select>
+                                <input class="bg-transparent w-4/12 placeholder:text-slate-400 focus:outline-none"
+                                       placeholder="Column" name="constraintColumn">
+                                <i class="bi bi-x relative w-1/12 text-base text-slate-400
+                                    hover:cursor-pointer hover:text-slate-100" onclick="removeBlock(this)"></i>
+                            </div>
+                            <div class="relative w-full flex flex-row gap-2 text-left hidden js-reference-block">
+                                <input class="relative bg-transparent w-2/5 placeholder:text-slate-400 focus:outline-none"
+                                       placeholder="Reference table" name="referenceTable">
+                                <input class="relative bg-transparent w-2/5 placeholder:text-slate-400 focus:outline-none"
+                                       placeholder="Reference column" name="referenceColumn">
+                            </div>
+                            <div class="relative w-full flex flex-row gap-2 hidden js-check-block">
+                                <input class="bg-transparent w-full placeholder:text-slate-400 focus:outline-none"
+                                       placeholder="Check expression..." name="checkExpression">
+                            </div>
+                        </div>
+                        <span class="relative self-center flex items-center justify-center w-1/5 max-w-full border-[1px] rounded border-slate-400
+                            transition text-slate-400 hover:cursor-pointer hover:bg-slate-100 hover:border-slate-100 hover:text-slate-800"
+                              onclick="newBlock(this)">
+                        <i class="bi bi-plus text-base"></i>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <span class="relative border-[1px] border-slate-400 text-slate-400 max-w-xs min-w-max h-fit p-3 text-center rounded
+                    transition hover:border-slate-100 hover:text-slate-800 hover:bg-slate-100 hover:cursor-pointer
+                    my-auto"
+                    onclick="newBlock(this)">
+                <i class="bi bi-plus-lg text-xl"></i>
+            </span>
+        </div>
+        <div class="sticky right-0 h-full w-1/4 min-w-fit max-w-sm px-2 py-5">
+            <div class="relative h-full w-full px-3 py-5 flex flex-col justify-between bg-slate-800 rounded text-xs
+                    text-slate-100 overflow-y-auto shadow-md shadow-[rgba(1,1,1,0.2)]">
+                <div class="relative flex flex-col gap-2">
+                    <input class="relative bg-transparent w-full border-[1px] border-slate-400 rounded p-1 placeholder:text-slate-400
+                                focus:outline-none focus:border-slate-100" placeholder="Project name" value="Untitled">
+                    <hr class="border-slate-600">
+                    <select class="bg-transparent text-slate-400 w-full border-[1px] border-slate-400 rounded p-1
+                                    focus:outline-none hover:cursor-pointer">
+                        <option selected>RDBMS</option>
+                    </select>
+                    <input class="relative bg-transparent w-full border-[1px] border-slate-400 rounded p-1
+                           placeholder:text-slate-400 focus:outline-none focus:border-slate-100"
+                           placeholder="Schema name" id="schema_name" th:value="${schema.sqlSchema.orElse('')}">
+                    <div class="relative flex flex-row items-center gap-2">
+                        <input type="checkbox" id="byRoot" th:checked="${schema.isByRoot()}">
+                        <span class="text-slate-300">build as DB admin</span>
+                        <div class="relative group">
+                            <i class="bi bi-info-circle group-hover:hidden"></i>
+                            <i class="bi bi-info-circle-fill hidden group-hover:cursor-pointer group-hover:block"></i>
+                            <p class="hidden absolute w-28 top-5 right-2 p-1 rounded bg-slate-700 text-xs
+                                            group-hover:inline-block hover:inline-block">
+                                Creates additional script part to initialize specified DB user, if it is absent.
+                            </p>
+                        </div>
+                    </div>
+                    <hr class="border-slate-600">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<footer class="sticky bottom-0 p-2 z-30 min-w-fit max-w-md">
+    <div class="relative flex flex-row min-w-full gap-5 py-2 px-5 rounded bg-slate-800 shadow-md shadow-[rgba(1,1,1,0.2)]">
+        <button class="relative py-1 px-5 rounded border-[1px] border-slate-100 text-slate-100 text-center
+                        hover:bg-blue-500 hover:border-blue-500 group" onclick="process()">
+                    <span class="hidden absolute bottom-12 left-0 z-10 transition text-slate-300
+                        text-xs rounded bg-slate-700 px-2 group-hover:inline-block">Save</span>
+            <i class="bi bi-cloud-check text-xl"></i>
+        </button>
+        <button class="relative py-1 px-5 rounded border-[1px] border-slate-100 text-slate-100 text-center
+                        hover:bg-red-500 hover:border-red-500 group" onclick="resetSession()">
+                    <span class="hidden absolute bottom-12 left-0 z-10 transition text-slate-300
+                        text-xs rounded bg-slate-700 px-2 group-hover:inline-block">Reset</span>
+            <i class="bi bi-arrow-counterclockwise text-xl"></i>
+        </button>
+        <button class="relative py-1 px-5 rounded border-[1px] border-slate-100 text-slate-100 text-center
+                        hover:bg-green-500 hover:border-green-500 group" onclick="downloadScript()">
+                    <span class="hidden absolute bottom-12 left-0 z-10 transition text-slate-300
+                        text-xs rounded bg-slate-700 px-2 group-hover:inline">Download</span>
+            <i class="bi bi-download text-xl"></i>
+        </button>
+    </div>
+</footer>
+<div class="absolute inset-0 z-40 w-full h-full bg-[rgba(1,1,1,0.5)] text-center hidden js-process-block">
+    <div class="absolute inset-0 m-auto flex flex-col gap-1 p-2 w-28 h-28 rounded  text-slate-100
+                    text-center text-xl justify-center">
+        <i class="bi bi-arrow-repeat text-6xl motion-reduce:hidden animate-spin js-process-processing-icon"></i>
+        <i class="bi bi-check-circle text-5xl hidden js-process-done-icon"></i>
+        <span class="block js-process-processing-text">Processing...</span>
+        <span class="hidden js-process-done-text">Done!</span>
+    </div>
+</div>
+</body>
+</html>

@@ -60,6 +60,29 @@ async function raiseAlert(id, duration) {
     },400);
 }
 
+function processDetectorOn() {
+    $(document.querySelector('.js-process-block')).toggle(true);
+}
+
+async function processDetectorOff() {
+    let pBlock = document.querySelector('.js-process-block');
+    let pPrTxt = $(pBlock).find('.js-process-processing-text');
+    let pPrIcn = $(pBlock).find('.js-process-processing-icon');
+    let pDnTxt = $(pBlock).find('.js-process-done-text');
+    let pDnIcn = $(pBlock).find('.js-process-done-icon');
+    await sleep(500);
+    $(pPrTxt).toggle(false);
+    $(pPrIcn).toggle(false);
+    $(pDnTxt).toggle(true);
+    $(pDnIcn).toggle(true);
+    await sleep(1000);
+    $(pPrTxt).toggle(true);
+    $(pPrIcn).toggle(true);
+    $(pDnTxt).toggle(false);
+    $(pDnIcn).toggle(false);
+    $(pBlock).toggle(false);
+}
+
 function toggleConstraintOptional(element) {
     let parent = element.parentNode.parentNode;
     if ($(element).val() === 'FOREIGN_KEY') {
@@ -75,12 +98,13 @@ function toggleConstraintOptional(element) {
 }
 
 async function process() {
+    processDetectorOn();
 
     let tables = document.getElementsByClassName('js-table-block');
 
     let raw = {};
     raw.sqlSchema = document.getElementById('schema_name').value || null;
-    raw.byRoot = $(document.getElementById('is_root_check')).is(':checked');
+    raw.byRoot = $(document.getElementById('byRoot')).is(':checked');
     raw.user = '';
     raw.schemaName = '';
     let rawtables = [];
@@ -108,7 +132,7 @@ async function process() {
                     },
                 'check': !$(c).find('.js-check-block').is(':visible') ? null :
                     {
-                        'type': $(c).find('[name="checkType"]').val(),
+                        'type': 'EQUALS',
                         'expression': $(c).find('[name="checkExpression"]').val()
                     }
             });
@@ -130,7 +154,7 @@ async function process() {
         }
     });
 
-    raiseAlert('alert-sv', 2000);
+    await processDetectorOff();
 }
 
 async function downloadScript() {
@@ -147,7 +171,7 @@ async function downloadScript() {
         return [flag, resp.status, resp.blob()]
     }).then(data => {
         if (data[0]) return data[2]
-        else alertOnError(data)
+        // else alertOnError(data)
     }).then(blob => {
         if (blob) download(blob, 'scriptDDL.sql')
     });

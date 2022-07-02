@@ -34,4 +34,16 @@ public class WebController {
         newSchema(model, session);
         return new RedirectView("/new");
     }
+
+    @GetMapping("/some")
+    public ModelAndView someView(Model model, HttpSession session) {
+        Session localSession = APIController.initiateNewSession(session);
+        SQLSchema schema = localSession == null ? new SQLSchema() : localSession.getSessionSchema();
+        model.addAttribute("coltypes", SQLColTypes.values());
+        model.addAttribute("contypes", SQLConTypes.values());
+        model.addAttribute("checktypes", SQLCheckTypes.values());
+        model.addAttribute("schema", schema);
+        model.addAttribute("title", "SomeCoolPage");
+        return new ModelAndView("editor");
+    }
 }
